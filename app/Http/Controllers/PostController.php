@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\Post as PostResource;
 use App\Notifications\PostCreated as NotificationsPostCreated;
-use App\User;
 
 class PostController extends Controller
 {
@@ -29,9 +28,9 @@ class PostController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function create(Request $request)
     {
         $validatedData = $request->validate([
             'content' => ['nullable', 'required_without_all:reshare', 'max:255'],
@@ -61,14 +60,15 @@ class PostController extends Controller
 
         if (array_key_exists('image', $validatedData))
         {
+            if ($request->file('image')) {
+                foreach($request->file('image') as $file)
+                {
+                    $path = $file->store('public/images');
 
-            foreach($request->file('image') as $file)
-            {
-                $path = $file->store('public/images');
-
-                $image = new Image;
-                $image->url = $path;
-                $post->images()->save($image);
+                    $image = new Image;
+                    $image->url = $path;
+                    $post->images()->save($image);
+                }
             }
         }
 
@@ -95,7 +95,7 @@ class PostController extends Controller
     /**
      * Like the post
      * @param \App\Models\Post $post
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function like(Post $post)
     {
@@ -110,7 +110,7 @@ class PostController extends Controller
     /**
      * Unlike the post
      * @param \App\Models\Post $post
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function unlike(Post $post)
     {
@@ -120,5 +120,15 @@ class PostController extends Controller
             data: new PostResource($post),
             status: 200
         );
+    }
+
+    /**
+     * Get a post
+     * @param \App\Models\Post $post
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get(Post $post)
+    {
+        return response()->json(data: new PostResource($post));
     }
 }
