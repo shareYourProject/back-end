@@ -69,9 +69,9 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Get the user that wrote the post.
      */
-    public function owned_project()
+    public function owned_projects()
     {
-        return $this->hasMany('App\Models\Project', 'owner_id');
+        return $this->projects()->wherePivot('role', config('permission.names')[0]);
     }
 
     /**
@@ -79,7 +79,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function projects()
     {
-        return $this->belongsToMany('App\Models\Project');
+        return $this->belongsToMany(Project::class)->withPivot('role');
     }
 
     /**
@@ -140,11 +140,11 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * The role that belongs to the user
+     * The role that belongs to the user on the project.
      */
-    public function roles()
+    public function role(Project $project)
     {
-        return $this->belongsToMany('App\Models\Role');
+        return $this->projects()->where('project_id', $project->id)->first()->pivot->role;
     }
 
     /**

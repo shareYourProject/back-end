@@ -36,7 +36,7 @@ class Project extends Model
      */
     public function owner()
     {
-        return $this->belongsTo('App\User');
+        return $this->members()->wherePivot('role', config('permission.names')[0]);
     }
 
     /**
@@ -68,7 +68,8 @@ class Project extends Model
      */
     public function members()
     {
-        return $this->belongsToMany('App\User', 'project_user', 'project_id', 'user_id');
+        return $this->belongsToMany('App\User', 'project_user', 'project_id', 'user_id')
+                    ->withPivot('role');
     }
 
     /**
@@ -125,14 +126,6 @@ class Project extends Model
         } else {
             return asset('vendor/courier/img/default_project_banner.jpg');
         }
-    }
-
-    /**
-     * Get the roles of the project
-     */
-    public function roles()
-    {
-        return $this->hasMany('App\Models\Role');
     }
 
     /**
