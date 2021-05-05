@@ -15,16 +15,15 @@ class RefactoringPermmissions extends Migration
     {
         Schema::dropIfExists('role_user');
 
-        Schema::table('roles', function(Blueprint $table) {
-            $table->dropForeign('roles_project_id_foreign');
-
-            $table->dropColumn(['permissions', 'project_id']);
-        });
+        Schema::dropIfExists('roles');
 
         Schema::table('project_user', function(Blueprint $table) {
-            $table->unsignedBigInteger('role_id');
+            $table->enum('role', config('permission.names'));
+        });
 
-            $table->foreign('role_id')->references('id')->on('roles');
+        Schema::table('projects', function(Blueprint $table) {
+            $table->dropForeign('projects_author_id_foreign');
+            $table->dropColumn('owner_id');
         });
     }
 
@@ -44,7 +43,9 @@ class RefactoringPermmissions extends Migration
             $table->foreign('user_id')->references('id')->on('users');
         });
 
-        Schema::table('roles', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
             $table->json('permissions');
             $table->unsignedBigInteger('project_id');
 
@@ -52,7 +53,13 @@ class RefactoringPermmissions extends Migration
         });
 
         Schema::table('project_user', function(Blueprint $table) {
-            $table->dropForeign(['role_id']);
+            $table->dropColumn(['role']);
+        });
+
+        Schema::table('projects', function(Blueprint $table) {
+            $table->unsignedBigInteger('owner_id');
+
+            $table->foreign('owner_id')->references('id')->on('users');
         });
     }
 }
