@@ -58,13 +58,6 @@ jobs:
           DB_PASSWORD: root
         run: vendor/bin/phpunit
 
-      - name: Deploy in production
-        run: php vendor/bin/envoy run deploy --branch=main
-
-  deploy:
-
-    runs-on: ubuntu-latest
-    steps:
       - name: Connect
         uses: appleboy/ssh-action@master
         with:
