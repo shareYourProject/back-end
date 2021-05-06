@@ -58,10 +58,10 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd ${{ secrets.REMOTE_PROJECT_PATH }}
-            ${{ REMOTE_PHP_PATH }} artisan down -n
+            ${{ secrets.REMOTE_PHP_PATH }} artisan down -n
             git pull main
-            ${{ REMOTE_PHP_PATH }} ${{ REMOTE_COMPOSER_PATH}} install --optimize-autoloader --no-dev
-            ${{ REMOTE_PHP_PATH }} artisan migrate --force -v
-            ${{ REMOTE_PHP_PATH }} artisan config:cache -v
-            ${{ REMOTE_PHP_PATH }} artisan route:cache -v
-            ${{ REMOTE_PHP_PATH }} artisan up -n
+            ${{ secrets.REMOTE_PHP_PATH }} ${{ secrets.REMOTE_COMPOSER_PATH}} install --optimize-autoloader --no-dev
+            ${{ secrets.REMOTE_PHP_PATH }} artisan migrate --force -v
+            ${{ secrets.REMOTE_PHP_PATH }} artisan config:cache -v
+            ${{ secrets.REMOTE_PHP_PATH }} artisan route:cache -v
+            ${{ secrets.REMOTE_PHP_PATH }} artisan up -n
