@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Project extends JsonResource
+class ProjectResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,7 +20,7 @@ class Project extends JsonResource
             'formated_descripton' => $this->formatedDescription,
             'name' => $this->name,
             'public' => $this->is_public,
-            'owner_id' => $this->owner_id,
+            'owner_id' => $this->owner->id,
             'url' => [
                 // 'index' => route('projects.show', ['project'=>$this->id]),
                 // 'members' => route('projects.members', ['project'=>$this->id]),

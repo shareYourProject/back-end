@@ -4,13 +4,13 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
-use \App\Http\Resources\Project as ProjectResource;
+use \App\Http\Resources\ProjectResource as ProjectResource;
 use \App\Http\Resources\User as UserResource;
-use \App\Http\Resources\Comment as CommentResource;
+use \App\Http\Resources\CommentResource as CommentResource;
 use \App\Http\Resources\Tag as TagResource;
 use Illuminate\Support\Facades\Storage;
 
-class Post extends JsonResource
+class PostResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

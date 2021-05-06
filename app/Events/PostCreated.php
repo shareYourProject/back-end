@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Http\Resources\Post as ResourcesPost;
+use App\Http\Resources\PostResource as ResourcesPost;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;

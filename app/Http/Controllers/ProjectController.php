@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\PostCollection;
-use App\Models\Post;
 use App\Models\Tag;
 use App\Models\Project;
-use App\Http\Resources\Project as ProjectResource;
+use App\Http\Resources\ProjectResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,12 +22,11 @@ class ProjectController extends Controller
     /**
      * Get a project
      * @param  \App\Models\Project  $project
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function get(Request $request, Project $project)
+    public function get(Request $request, Project $project): \Illuminate\Http\JsonResponse
     {
         return response()->json(
-            status: 200,
             data: new ProjectResource($project)
         );
     }
@@ -37,9 +35,9 @@ class ProjectController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
         $validatedData = $request->validate([
             'name' => ['required', 'max:255'],
@@ -54,7 +52,6 @@ class ProjectController extends Controller
 
         $project = new Project;
         $project->name = $validatedData['name'];
-        $project->owner()->associate(Auth::user());
         $project->description = $validatedData['description'];
         $project->status = $validatedData['status'];
         $project->started_at = $validatedData['start_date'];
@@ -62,8 +59,8 @@ class ProjectController extends Controller
         $project->save();
 
         if ($request->exists('collaborators')) {
-            $project->members()->attach($validatedData['collaborators']);
-            $project->members()->attach(Auth::user()->id);
+            $project->members()->attach($validatedData['collaborators'], ['role' => config('permissions.names')[-1]]);
+            $project->members()->attach(Auth::user()->id, ['role' => config('permissions.names')[0]]);
         }
 
         if ($request->exists('badges')) {
@@ -94,7 +91,7 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Project $project)
+    public function destroy(Project $project): \Illuminate\Http\Response
     {
         //
     }
@@ -102,21 +99,20 @@ class ProjectController extends Controller
     /**
      * Search a list of project
      */
-    public function search(Request $request)
+    public function search(Request $request): \Illuminate\Http\JsonResponse
     {
         $query = $request->query('query');
         $projects = Project::where('name', 'like', '%'.$query.'%')
                             ->limit(3)->get();
         return response()->json(
-            data: ProjectResource::collection($projects),
-            status: 200
+            data: ProjectResource::collection($projects)
         );
     }
 
     /**
      * Get the posts of the project
      */
-    public function posts(Request $request, Project $project)
+    public function posts(Request $request, Project $project): PostCollection
     {
         return new PostCollection($project->posts()->paginate(5));
     }
