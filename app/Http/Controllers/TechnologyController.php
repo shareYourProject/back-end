@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Technology;
-use App\Http\Resources\Badge as BadgeResource;
+use App\Http\Resources\BadgeResource;
 
 class TechnologyController extends Controller
 {
@@ -20,7 +20,7 @@ class TechnologyController extends Controller
      * Get badges
      *
      * @param \Illuminate\Http\Request $request
-     * @return \App\Http\Resources\Badge
+     * @return \App\Http\Resources\BadgeResource
      */
     public function search(Request $request)
     {

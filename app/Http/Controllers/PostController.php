@@ -8,7 +8,7 @@ use App\Models\Project;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Resources\Post as PostResource;
+use App\Http\Resources\PostResource;
 use App\Notifications\PostCreated as NotificationsPostCreated;
 
 class PostController extends Controller
@@ -30,7 +30,7 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function create(Request $request)
+    public function create(Request $request): \Illuminate\Http\JsonResponse
     {
         $validatedData = $request->validate([
             'content' => ['nullable', 'required_without_all:reshare', 'max:255'],
@@ -85,7 +85,7 @@ class PostController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function destroy(Post $post)
     {
@@ -97,7 +97,7 @@ class PostController extends Controller
      * @param \App\Models\Post $post
      * @return \Illuminate\Http\JsonResponse
      */
-    public function like(Post $post)
+    public function like(Post $post): \Illuminate\Http\JsonResponse
     {
         $post->like(Auth::user());
 
@@ -112,7 +112,7 @@ class PostController extends Controller
      * @param \App\Models\Post $post
      * @return \Illuminate\Http\JsonResponse
      */
-    public function unlike(Post $post)
+    public function unlike(Post $post): \Illuminate\Http\JsonResponse
     {
         $post->unlike(Auth::user());
 
@@ -127,7 +127,7 @@ class PostController extends Controller
      * @param \App\Models\Post $post
      * @return \Illuminate\Http\JsonResponse
      */
-    public function get(Post $post)
+    public function get(Post $post): \Illuminate\Http\JsonResponse
     {
         return response()->json(data: new PostResource($post));
     }

@@ -34,15 +34,15 @@ class Project extends Model
     /**
      * Get the user that owns the project.
      */
-    public function owner()
+    public function owner(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsTo('App\User');
+        return $this->members()->wherePivot('role', config('permission.names')[0]);
     }
 
     /**
      * Get all of the tags for the project.
      */
-    public function tags()
+    public function tags(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
         return $this->morphToMany('App\Models\Tag', 'taggable');
     }
@@ -50,7 +50,7 @@ class Project extends Model
     /**
      * Get all of the technologies for the project.
      */
-    public function technologies()
+    public function technologies(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
         return $this->morphToMany('App\Models\Technology', 'technologisable');
     }
@@ -58,7 +58,7 @@ class Project extends Model
     /**
      * Get all of the posts for the project.
      */
-    public function posts()
+    public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany('App\Models\Post');
     }
@@ -66,9 +66,10 @@ class Project extends Model
     /**
      * Get the members of the project.
      */
-    public function members()
+    public function members(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany('App\User', 'project_user', 'project_id', 'user_id');
+        return $this->belongsToMany('App\User', 'project_user', 'project_id', 'user_id')
+                    ->withPivot('role');
     }
 
     /**
@@ -77,7 +78,7 @@ class Project extends Model
      * @param integer $value
      * @return string
      */
-    public function getStatusAttribute($value)
+    public function getStatusAttribute($value): string
     {
         return array_search($value, Project::STATUS);
     }
@@ -98,7 +99,7 @@ class Project extends Model
      * @param string $value
      * @return string
      */
-    public function getFormatedDescriptionAttribute()
+    public function getFormatedDescriptionAttribute(): string
     {
         return nl2br($this->description);
     }
@@ -128,17 +129,9 @@ class Project extends Model
     }
 
     /**
-     * Get the roles of the project
-     */
-    public function roles()
-    {
-        return $this->hasMany('App\Models\Role');
-    }
-
-    /**
      * Get the followers of the project
      */
-    public function followers()
+    public function followers(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(User::class, 'project_follows', 'project_id', 'follower_id');
     }

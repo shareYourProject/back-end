@@ -3,9 +3,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Project;
 
-class User extends JsonResource
+class UserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -13,7 +12,7 @@ class User extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
             'id' => $this->id,
@@ -31,9 +30,9 @@ class User extends JsonResource
             ],
             'profile_picture' => $this->profile_picture(),
             'banner_picture' => $this->banner_picture(),
-            'owned_projects' => Project::collection($this->owned_project),
+            'owned_projects' => ProjectResource::collection($this->owned_project),
             'followed_projects' => $this->followed_projects->pluck('id'),
-            'projects' => Project::collection($this->projects)
+            'projects' => ProjectResource::collection($this->projects)
         ];
     }
 }
