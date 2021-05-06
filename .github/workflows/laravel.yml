@@ -11,6 +11,12 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      DB_CONNECTION: mysql
+      DB_DATABASE: shareyourproject
+      DB_USER: root
+      DB_PASSWORD: root
+
     steps:
       - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
         with:
@@ -30,11 +36,6 @@ jobs:
         run: chmod -R 777 storage bootstrap/cache
 
       - name: Create Database MySQL
-        env:
-          DB_CONNECTION: mysql
-          DB_DATABASE: shareyourproject
-          DB_USER: root
-          DB_PASSWORD: root
         run: |
           sudo systemctl enable mysql.service
           sudo systemctl start mysql.service
@@ -43,19 +44,9 @@ jobs:
           mysql --host 127.0.0.1 -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS shareyourproject;'
 
       - name: Run migrations
-        env:
-          DB_CONNECTION: mysql
-          DB_DATABASE: shareyourproject
-          DB_USER: root
-          DB_PASSWORD: root
         run: php artisan migrate --force -v
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
-        env:
-          DB_CONNECTION: mysql
-          DB_DATABASE: shareyourproject
-          DB_USER: root
-          DB_PASSWORD: root
         run: vendor/bin/phpunit
 
       - name: Connect
@@ -65,4 +56,12 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: echo "Hello  world !"
+          script: |
+            cd ${{ secrets.REMOTE_PROJECT_PATH }}
+            ${{ REMOTE_PHP_PATH }} artisan down -n
+            git pull main
+            ${{ REMOTE_PHP_PATH }} ${{ REMOTE_COMPOSER_PATH}} install --optimize-autoloader --no-dev
+            ${{ REMOTE_PHP_PATH }} artisan migrate --force -v
+            ${{ REMOTE_PHP_PATH }} artisan config:cache -v
+            ${{ REMOTE_PHP_PATH }} artisan route:cache -v
+            ${{ REMOTE_PHP_PATH }} artisan up -n
