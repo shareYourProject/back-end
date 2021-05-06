@@ -1,7 +1,7 @@
 @include('vendor/autoload.php')
 
 @setup
-    $php_path = '/usr/bin/php7.4-cli';
+    $php_path = '/usr/bin/php8.0-cli';
     $composer_path = '../composer.phar';
     $project_path = 'web-app';
 @endsetup

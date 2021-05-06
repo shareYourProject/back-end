@@ -59,7 +59,7 @@ jobs:
           script: |
             cd ${{ secrets.REMOTE_PROJECT_PATH }}
             ${{ secrets.REMOTE_PHP_PATH }} artisan down -n
-            git pull main
+            git pull origin main
             ${{ secrets.REMOTE_PHP_PATH }} ${{ secrets.REMOTE_COMPOSER_PATH}} install --optimize-autoloader --no-dev
             ${{ secrets.REMOTE_PHP_PATH }} artisan migrate --force -v
             ${{ secrets.REMOTE_PHP_PATH }} artisan config:cache -v
