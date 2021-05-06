@@ -8,14 +8,13 @@
 
 @servers(['production' => 'u102593862@access847528813.webspace-data.io'])
 
-@story('deploy', ['on' => 'production'])
-deploy
-@endstory
-
-@task('deploy')
+@task('deploy', ['on' => 'production'])
     cd {{ $project_path }}
     {{ $php_path }} artisan down -n
-    git pull origin production
+
+    @if ($branch)
+        git pull origin production
+    @endif
 
     {{ $php_path }} {{ $composer_path }} install --optimize-autoloader --no-dev
 
