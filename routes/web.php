@@ -23,7 +23,7 @@ Route::get('/', function () {
     return view('app');
 })->name('home');
 
-Auth::routes(['verify' => true]);
+// Auth::routes(['verify' => true]);
 
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 
