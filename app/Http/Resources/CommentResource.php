@@ -3,8 +3,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use \App\Http\Resources\User as UserResource;
-use \App\Http\Resources\PostResource as PostResource;
+use \App\Http\Resources\UserResource;
+use \App\Http\Resources\PostResource;
 
 class CommentResource extends JsonResource
 {

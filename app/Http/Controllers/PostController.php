@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\PostCreated;
+use App\Http\Resources\CommentCollection;
 use App\Models\Post;
 use App\Models\Project;
 use App\Models\Image;
@@ -130,5 +131,16 @@ class PostController extends Controller
     public function get(Post $post): \Illuminate\Http\JsonResponse
     {
         return response()->json(data: new PostResource($post));
+    }
+
+    /**
+     * Get comments of a post
+     *
+     * @param Post $post
+     * @return CommentCollection
+     */
+    public function getComments(Post $post): CommentCollection
+    {
+        return new CommentCollection($post->comments()->paginate(3));
     }
 }
