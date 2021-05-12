@@ -30,7 +30,7 @@ class UserResource extends JsonResource
             ],
             'profile_picture' => $this->profile_picture(),
             'banner_picture' => $this->banner_picture(),
-            'owned_projects' => ProjectResource::collection($this->owned_project),
+            'owned_projects' => ProjectResource::collection($this->owned_projects),
             'followed_projects' => $this->followed_projects->pluck('id'),
             'projects' => ProjectResource::collection($this->projects)
         ];

@@ -4,10 +4,10 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
-use \App\Http\Resources\ProjectResource as ProjectResource;
-use \App\Http\Resources\User as UserResource;
-use \App\Http\Resources\CommentResource as CommentResource;
-use \App\Http\Resources\Tag as TagResource;
+use \App\Http\Resources\ProjectResource;
+use \App\Http\Resources\UserResource;
+use \App\Http\Resources\CommentResource;
+use \App\Http\Resources\TagResource;
 use Illuminate\Support\Facades\Storage;
 
 class PostResource extends JsonResource
