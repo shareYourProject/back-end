@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\CommentResource;
 use App\Models\Comment;
@@ -66,9 +67,9 @@ class CommentController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Comment  $comment
-     * @return JsonResponse
+     * @return CommentResource
      */
-    public function update(Request $request, Comment $comment): JsonResponse
+    public function update(Request $request, Comment $comment): CommentResource
     {
         if ($request->user()->cannot('update', $comment)) {
             abort(403);
@@ -81,7 +82,7 @@ class CommentController extends Controller
         $comment->content = $validatedData['content'];
         $comment->save();
 
-        return new JsonResponse();
+        return new CommentResource($comment);
     }
 
     /**
