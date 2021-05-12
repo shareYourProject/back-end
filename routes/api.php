@@ -6,7 +6,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\TechnologyController;
-use App\Http\Resources\User as UserResource;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -40,7 +40,7 @@ Route::name('post.')->prefix('posts')->group(function() {
     });
 
     Route::get('/{post}', [PostController::class, 'get'])->name('get');
-
+    Route::get('/{post}/comments', [PostController::class, 'getComments'])->name('comments');
 });
 
 Route::name('user.')->prefix('users')->group(function() {
