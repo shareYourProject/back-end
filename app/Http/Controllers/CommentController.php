@@ -40,9 +40,9 @@ class CommentController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \App\Http\Resources\CommentResource|\Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function store(Request $request): CommentResource|\Illuminate\Http\Response
+    public function store(Request $request): JsonResponse
     {
         if ($request->user()->cannot('create', Comment::class)) {
             abort(403);
@@ -59,7 +59,7 @@ class CommentController extends Controller
 
         Post::find($validatedData['post_id'])->comments()->save($comment);
 
-        return new CommentResource($comment);
+        return new JsonResponse(new CommentResource($comment), 201);
     }
 
     /**
