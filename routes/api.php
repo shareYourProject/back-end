@@ -4,6 +4,7 @@ use App\Http\Controllers\FeedController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\TechnologyController;
 use App\Http\Resources\User as UserResource;
 use Illuminate\Http\Request;
@@ -54,6 +55,17 @@ Route::name('project.')->prefix('projects')->group(function() {
     Route::get('/search', [ProjectController::class, 'search'])->name('search');
     route::get('/{project}', [ProjectController::class, 'get'])->name('get');
     Route::get('/{project}/posts', [ProjectController::class, 'posts'])->name('posts');
+});
+
+Route::name('comments.')->prefix('comments')->group(function() {
+    Route::middleware('auth:sanctum')->group(function () {
+
+        Route::post('/', [CommentController::class, 'store'])->name('create');
+        Route::delete('/{comment}', [CommentController::class, 'destroy'])->name('delete');
+        Route::put('/{comment}', [CommentController::class, 'update'])->name('update');
+
+    });
+   Route::get('/{comment}', [CommentController::class, 'get'])->name('get');
 });
 
 Route::name('badge.')->prefix('badges')->group(function() {
