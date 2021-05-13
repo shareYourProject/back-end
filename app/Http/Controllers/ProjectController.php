@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\PostCollection;
+use App\Http\Resources\UserResource;
 use App\Models\Tag;
 use App\Models\Project;
 use App\Http\Resources\ProjectResource;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -115,5 +117,27 @@ class ProjectController extends Controller
     public function posts(Request $request, Project $project): PostCollection
     {
         return new PostCollection($project->posts()->paginate(5));
+    }
+
+    public function follow(Request $request, Project $project)
+    {
+        if ($request->user()->cannot('follow', $project)) {
+            abort(403);
+        }
+
+        Auth::user()->followed_projects()->attach($project->id);
+
+        return new JsonResponse(new UserResource(Auth::user()));
+    }
+
+    public function unfollow(Request $request, Project $project)
+    {
+        if ($request->user()->cannot('unfollow', $project)) {
+            abort(403);
+        }
+
+        Auth::user()->followed_projects()->detach($project->id);
+
+        return new JsonResponse(new UserResource(Auth::user()));
     }
 }
