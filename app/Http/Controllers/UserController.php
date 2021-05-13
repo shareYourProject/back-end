@@ -147,4 +147,32 @@ class UserController extends Controller
 
         return response()->json(UserResource::collection($users), 200);
     }
+
+    /**
+     * Get the authenticated user follow a project.
+     *
+     * @param Request $request
+     * @param User $user
+     * @return JsonResponse
+     */
+    public function follow(Request $request, User $user): JsonResponse
+    {
+        Auth::user()->followed_users()->attach($user->id);
+
+        return new JsonResponse(new UserResource(Auth::user()));
+    }
+
+    /**
+     * Get the authenticated user unfollow a project.
+     *
+     * @param Request $request
+     * @param User $user
+     * @return JsonResponse
+     */
+    public function unfollow(Request $request, User $user): JsonResponse
+    {
+        Auth::user()->followed_users()->detach($user->id);
+
+        return new JsonResponse(new UserResource(Auth::user()));
+    }
 }
