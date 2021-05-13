@@ -34,9 +34,9 @@ class Project extends Model
     /**
      * Get the user that owns the project.
      */
-    public function owner(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function owner(): User|null
     {
-        return $this->members()->wherePivot('role', config('permission.names')[0]);
+        return $this->members()->wherePivot('role', config('permission.names')[0])->first();
     }
 
     /**
