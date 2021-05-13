@@ -20,7 +20,7 @@ class ProjectResource extends JsonResource
             'formated_descripton' => $this->formatedDescription,
             'name' => $this->name,
             'public' => $this->is_public,
-            'owner_id' => $this->owner->id,
+            'owner_id' => $this->owner()?->id,
             'url' => [
                 // 'index' => route('projects.show', ['project'=>$this->id]),
                 // 'members' => route('projects.members', ['project'=>$this->id]),
