@@ -53,8 +53,13 @@ Route::name('user.')->prefix('users')->group(function() {
 
 Route::name('project.')->prefix('projects')->group(function() {
     Route::get('/search', [ProjectController::class, 'search'])->name('search');
-    route::get('/{project}', [ProjectController::class, 'get'])->name('get');
+    Route::get('/{project}', [ProjectController::class, 'get'])->name('get');
     Route::get('/{project}/posts', [ProjectController::class, 'posts'])->name('posts');
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::put('/{project}/follow', [ProjectController::class, 'follow'])->name('follow');
+        Route::put('/{project}/unfollow', [ProjectController::class, 'unfollow'])->name('unfollow');
+    });
 });
 
 Route::name('comments.')->prefix('comments')->group(function() {
