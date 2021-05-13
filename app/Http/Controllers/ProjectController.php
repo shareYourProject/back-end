@@ -119,7 +119,14 @@ class ProjectController extends Controller
         return new PostCollection($project->posts()->paginate(5));
     }
 
-    public function follow(Request $request, Project $project)
+    /**
+     * Get the authenticated user follow a project.
+     *
+     * @param Request $request
+     * @param Project $project
+     * @return JsonResponse
+     */
+    public function follow(Request $request, Project $project): JsonResponse
     {
         if ($request->user()->cannot('follow', $project)) {
             abort(403);
@@ -130,7 +137,14 @@ class ProjectController extends Controller
         return new JsonResponse(new UserResource(Auth::user()));
     }
 
-    public function unfollow(Request $request, Project $project)
+    /**
+     * Get the authenticated user unfollow a project.
+     *
+     * @param Request $request
+     * @param Project $project
+     * @return JsonResponse
+     */
+    public function unfollow(Request $request, Project $project): JsonResponse
     {
         if ($request->user()->cannot('unfollow', $project)) {
             abort(403);
