@@ -32,7 +32,7 @@ class UserResource extends JsonResource
             'banner_picture' => $this->banner_picture(),
             'owned_projects' => ProjectResource::collection($this->owned_projects),
             'followed_projects' => $this->followed_projects->pluck('id'),
-            'followed_users' => $this->followed_users->pluk('id'),
+            'followed_users' => $this->followed_users->pluck('id'),
             'projects' => ProjectResource::collection($this->projects)
         ];
     }
