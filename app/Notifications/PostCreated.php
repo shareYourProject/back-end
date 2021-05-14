@@ -29,6 +29,16 @@ class PostCreated extends Notification
     }
 
     /**
+     * Get the type of the notification being broadcast.
+     *
+     * @return string
+     */
+    public function broadcastType()
+    {
+        return 'post.create';
+    }
+
+    /**
      * Get the notification's delivery channels.
      *
      * @param  mixed  $notifiable
@@ -59,14 +69,11 @@ class PostCreated extends Notification
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            'text' => "{} has created a new post in {}",
-            "tags" => [
-                $this->post->author->fullname,
-                $this->post->project->name
-            ],
+            "title" => "New post",
+            "text" => $this->post->author->first_name." has created a new post !",
+            "post_id" => $this->post->id,
+            "image" => $this->post->author->profile_picture,
             "created_at" => Carbon::now(),
-            'picture' => $this->post->project->profile_picture(),
-            'url' => route('posts.show', ['post'=>$this->post->id])
         ]);
     }
 
@@ -79,14 +86,12 @@ class PostCreated extends Notification
     public function toArray($notifiable)
     {
         return [
-            'text' => "{} has created a new post in {}",
-            "tags" => [
-                $this->post->author->fullname,
-                $this->post->project->name
-            ],
-            'created_at' => Carbon::now(),
-            'picture' => $this->post->project->profile_picture(),
-            'url' => route('posts.show', ['post'=>$this->post->id])
+            "title" => "New post",
+            "type" => "post.create",
+            "text" => $this->post->author->first_name." has created a new post !",
+            "post_id" => $this->post->id,
+            "image" => $this->post->author->profile_picture,
+            "created_at" => Carbon::now(),
         ];
     }
 }

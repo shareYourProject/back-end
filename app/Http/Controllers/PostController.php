@@ -77,6 +77,8 @@ class PostController extends Controller
             foreach ($post->project->members as $member) {
                 $member->notify(new NotificationsPostCreated($post));
             }
+        } else {
+            Auth::user()->notify(new NotificationsPostCreated($post));
         }
 
         return response()->json(new PostResource($post), 201);
