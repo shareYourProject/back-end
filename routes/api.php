@@ -60,6 +60,7 @@ Route::name('notification.')->prefix('notifications')->group(function() {
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [NotificationController::class, 'get'])->name('get');
+        Route::put('/{id}', [NotificationController::class, 'markAsRead'])->whereUuid('id')->name('markAsRead');
     });
 });
 
