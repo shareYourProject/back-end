@@ -16,7 +16,8 @@ class NotificationResource extends JsonResource
     {
         return array_merge(
             $this->data, [
-                "id" => $this->id
+                "id" => $this->id,
+                "read_at" => $this->read_at
             ]
         );
     }
