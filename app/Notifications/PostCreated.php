@@ -68,13 +68,7 @@ class PostCreated extends Notification
      */
     public function toBroadcast($notifiable)
     {
-        return new BroadcastMessage([
-            "title" => "New post",
-            "text" => $this->post->author->first_name." has created a new post !",
-            "post_id" => $this->post->id,
-            "image" => $this->post->author->profile_picture,
-            "created_at" => Carbon::now(),
-        ]);
+        return new BroadcastMessage($this->attributes());
     }
 
     /**
@@ -85,13 +79,21 @@ class PostCreated extends Notification
      */
     public function toArray($notifiable)
     {
+        return array_merge([
+            "type" => "post.create"
+        ], $this->attributes());
+    }
+
+    public function attributes()
+    {
         return [
             "title" => "New post",
-            "type" => "post.create",
             "text" => $this->post->author->first_name." has created a new post !",
-            "post_id" => $this->post->id,
             "image" => $this->post->author->profile_picture,
             "created_at" => Carbon::now(),
+            "data" => [
+                "post_id" => $this->post->id
+            ]
         ];
     }
 }
