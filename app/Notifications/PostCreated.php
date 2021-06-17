@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use App\Models\Post;
 use Carbon\Carbon;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -84,6 +85,14 @@ class PostCreated extends Notification
         ], $this->attributes());
     }
 
+    public function broadcastOn()
+    {
+        return new PrivateChannel('App.User.'.$this->post->author->id);
+    }
+
+    /**
+     * @return array
+     */
     public function attributes()
     {
         return [
