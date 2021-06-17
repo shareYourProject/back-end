@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use App\Models\Post;
 use Carbon\Carbon;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -68,13 +69,7 @@ class PostCreated extends Notification
      */
     public function toBroadcast($notifiable)
     {
-        return new BroadcastMessage([
-            "title" => "New post",
-            "text" => $this->post->author->first_name." has created a new post !",
-            "post_id" => $this->post->id,
-            "image" => $this->post->author->profile_picture,
-            "created_at" => Carbon::now(),
-        ]);
+        return new BroadcastMessage($this->attributes());
     }
 
     /**
@@ -85,13 +80,29 @@ class PostCreated extends Notification
      */
     public function toArray($notifiable)
     {
+        return array_merge([
+            "type" => "post.create"
+        ], $this->attributes());
+    }
+
+    public function broadcastOn()
+    {
+        return new PrivateChannel('App.User.'.$this->post->author->id);
+    }
+
+    /**
+     * @return array
+     */
+    public function attributes()
+    {
         return [
             "title" => "New post",
-            "type" => "post.create",
             "text" => $this->post->author->first_name." has created a new post !",
-            "post_id" => $this->post->id,
             "image" => $this->post->author->profile_picture,
             "created_at" => Carbon::now(),
+            "data" => [
+                "post_id" => $this->post->id
+            ]
         ];
     }
 }

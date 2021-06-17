@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": ">=8.0",
+        "barryvdh/laravel-ide-helper": "^2.10",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^2.0",
@@ -18,8 +19,7 @@
         "laravel/sanctum": "^2.9",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
-        "pusher/pusher-php-server": "~4.0",
-        "barryvdh/laravel-ide-helper": "^2.10"
+        "pusher/pusher-php-server": "^5.0"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",
