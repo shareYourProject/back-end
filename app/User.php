@@ -11,7 +11,7 @@ use App\Models\Project;
 use App\Models\Settings;
 use App\Models\Post;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
     use Notifiable, HasFactory, HasApiTokens;
 
